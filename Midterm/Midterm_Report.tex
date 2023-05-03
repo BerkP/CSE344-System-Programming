@@ -1,0 +1,234 @@
+\documentclass[12pt]{report}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage[normalem]{ulem}
+\usepackage{soul}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{extarrows}
+\usepackage{graphicx}
+\usepackage[backend=biber,
+style=numeric,
+sorting=none,
+isbn=false,
+doi=false,
+url=false,
+]{biblatex}\addbibresource{bibliography-biblatex.bib}
+
+\usepackage{subfig}
+\usepackage{wrapfig}
+\usepackage{wasysym}
+\usepackage{enumitem}
+\usepackage{adjustbox}
+\usepackage{ragged2e}
+\usepackage[svgnames,table]{xcolor}
+\usepackage{tikz}
+\usepackage{longtable}
+\usepackage{changepage}
+\usepackage{setspace}
+\usepackage{hhline}
+\usepackage{multicol}
+\usepackage{tabto}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{fancyhdr}
+\usepackage[toc,page]{appendix}
+\usepackage[hidelinks]{hyperref}
+\usetikzlibrary{shapes.symbols,shapes.geometric,shadows,arrows.meta}
+\tikzset{>={Latex[width=1.5mm,length=2mm]}}
+\usepackage{flowchart}\usepackage[paperheight=11.69in,paperwidth=8.27in,left=1.0in,right=1.0in,top=1.49in,bottom=1.49in,headheight=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\TabPositions{0.49in,0.98in,1.47in,1.96in,2.45in,2.94in,3.43in,3.92in,4.41in,4.9in,5.39in,5.88in,}
+\urlstyle{same}
+\renewcommand{\_}{\kern-1.5pt\textunderscore\kern-1.5pt}
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+\setlistdepth{9}
+\renewlist{enumerate}{enumerate}{9}
+		\setlist[enumerate,1]{label=\arabic*)}
+		\setlist[enumerate,2]{label=\alph*)}
+		\setlist[enumerate,3]{label=(\roman*)}
+		\setlist[enumerate,4]{label=(\arabic*)}
+		\setlist[enumerate,5]{label=(\Alph*)}
+		\setlist[enumerate,6]{label=(\Roman*)}
+		\setlist[enumerate,7]{label=\arabic*}
+		\setlist[enumerate,8]{label=\alph*}
+		\setlist[enumerate,9]{label=\roman*}
+
+\renewlist{itemize}{itemize}{9}
+		\setlist[itemize]{label=$\cdot$}
+		\setlist[itemize,1]{label=\textbullet}
+		\setlist[itemize,2]{label=$\circ$}
+		\setlist[itemize,3]{label=$\ast$}
+		\setlist[itemize,4]{label=$\dagger$}
+		\setlist[itemize,5]{label=$\triangleright$}
+		\setlist[itemize,6]{label=$\bigstar$}
+		\setlist[itemize,7]{label=$\blacklozenge$}
+		\setlist[itemize,8]{label=$\prime$}
+
+\setlength{\topsep}{0pt}\setlength{\parskip}{8.04pt}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.3}
+
+\begin{document}
+\begin{Center}
+{\fontsize{16pt}{19.2pt}\selectfont \textbf{CSE344 – System Programming}}
+\\
+{\fontsize{16pt}{19.2pt}\selectfont \textbf{Midterm Project – Report}}
+\end{Center}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont Berk Pekgöz}
+\\
+{\fontsize{14pt}{16.8pt}\selectfont 171044041}
+\end{FlushLeft}
+\begin{FlushLeft}
+{\fontsize{16pt}{19.2pt}\selectfont \textbf{\uline{Solving The Problem $\&$  Design:}}}
+\end{FlushLeft}
+\begin{FlushLeft}
+To explain solving the problem and design, there are 9 subjects:
+\end{FlushLeft}
+\setlength{\parskip}{0.0pt}
+\begin{itemize}
+	\item Output difference
+	\item Shared Memory and Semaphores
+	\item Nurse
+	\item Vaccinator
+	\item Citizen
+	\item Parent Process
+	\item Error Handling
+	\item Ctrl + C Handling 
+	\item Bonus Part
+\end{itemize}
+
+\vspace{\baselineskip}
+
+\vspace{\baselineskip}
+\setlength{\parskip}{8.04pt}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont \textbf{Output difference:}} 
+\end{FlushLeft}
+\begin{FlushLeft}
+In PDF file Vaccinators does not print the current amount of vaccines but citizen prints. In my program, the exact opposite is the output (Vaccinator prints amount of vaccines but citizen does not) because amount of vaccines will be updated while inviting Citizen. And I sent an e-mail about this to Mr.Aptoula and he said \textit{\uline{$``$I think it would be better. Specify this in the report.$"$ }}.
+\end{FlushLeft}
+
+\vspace{\baselineskip}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont \textbf{Shared Memory and Semaphores:}} 
+\end{FlushLeft}
+\begin{FlushLeft}
+In this project, I have used two shared memory and seven semaphores. First shared memory keeps counters, unnamed semaphores and some useful values. Second shared memory keeps an citizen\_info (struct type) array with size number of citizen. This struct type keeps pid of the citizen and information of $``$is citizen busy or not$"$ .
+\end{FlushLeft}
+\begin{FlushLeft}
+Semaphores; \textit{buffer\_empty, vacc1\_full} and \textit{vacc2\_full }are semaphores for ensuring the producer consumer problem between nurses and vaccinators. \textit{sm\_mutex} and \textit{ct\_mutex }are semaphores for protecting the shared memories for critical regions. \textit{available\_ct} is a semaphore which provides waiting for a avaliable citizen to vaccinate. \textit{end\_barrier} is a semaphore which provides end barrier for vaccinators to print how many vaccines they have applied.
+\end{FlushLeft}
+
+\vspace{\baselineskip}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont \textbf{Nurse:}} 
+\end{FlushLeft}
+\begin{FlushLeft}
+Nurse processes have a while loop which keeps executing until all needed vaccines placed to the buffer. Buffer mechanism is achieved with 3 semaphores and 2 shared memory values. If there is no space in buffer, nurse processe wait with \textit{buffer\_empty }semaphore until a vaccinator posts that semaphore. Then read the file and gets the character. After that uses sem\_post() with associated semaphore (\textit{vacc1\_full} or \textit{vacc2\_full}) and increases the associated shared memory value (vacc\_1 or vacc\_2). If the character is not 1 or 2 then error occurs.
+\end{FlushLeft}
+\begin{FlushLeft}
+For each vaccine received, a counter in the shared memory (total\_vacc) increased by one. If total\_vacc reaches to the total vaccine number, then it means job of nurses is done and that process sets n\_done value in the shared memory to TRUE and terminates. After that other nurses checks that value and terminates themselves.
+\end{FlushLeft}
+
+\vspace{\baselineskip}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont \textbf{Vaccinator:}} 
+\end{FlushLeft}
+\begin{FlushLeft}
+Vaccinator processes have a while loop which keeps executing until no vaccines to be applied left. In while loop, process first checks the amount of vaccine to be applied left (not in buffer, in general). If there is no vaccination left then exits the loop. 
+\end{FlushLeft}
+\begin{FlushLeft}
+After the first check, if loop continues then wait for a available citizen to vaccinate with \textit{available\_ct }semaphore. If any citizen is available to be vaccinated (value of semaphore is bigger than zero) process can pass through this point. Then search for that available (busy is FALSE) citizen (in my program oldest available citizen for \textit{bonus part}) in the shared memory which keeps informations (pid/busy) of the citizens. After finding the citizen, sets that citizen’s busy status as TRUE to preventing other vaccinators to choose that citizen.
+\end{FlushLeft}
+\begin{FlushLeft}
+To check if there are any vaccine1 and vaccine 2, \textit{vacc1\_full} and \textit{vacc2\_full} semaphores are used. If there are no vaccine1 or vaccine2 then process waits for the nurses to place both of them to the buffer. After that point, process decrease the count of the vaccine1 and vaccine2 by one. Then prints the invite message and updated amount of vaccine1 and vaccine2 to the screen. After that sends SIGUSR1 signal to the citizen (who is waiting for a signal) and posts\textit{ buffer\_empty} semaphore two times because two vaccines (vaccine1 and vaccine2) is used so we need to make place for two vaccine.
+\end{FlushLeft}
+\begin{FlushLeft}
+When process gets out of the loop, wait for the end\_barrier semaphore to print amount of vaccination at the end of program.
+\end{FlushLeft}
+
+\vspace{\baselineskip}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont \textbf{Citizen:}} 
+\end{FlushLeft}
+\begin{FlushLeft}
+Citizen processes wait for a signal with sigsupend at the beginnig of a while loop. If SIGUSR1 signal received, it means a vaccinator invited that process to be vaccinated. If it is the first time inviting, citizen finds its own index number in the citizen info shared memory. Then decreases dose left, posts \textit{available\_ct }semaphore and prints the $``$Vaccinated$"$  message to the screen. 
+\end{FlushLeft}
+\begin{FlushLeft}
+After that check for dose left. If there more then 0 dose left, updates its busy status as FALSE and continues to the loop. But if there is no does left, then decreases citizen left value in the shared memory and exits.
+\end{FlushLeft}
+\begin{FlushLeft}
+If the process is the last citizen to left, then sends SIGUSR1 signal to the parent process to finish program.
+\end{FlushLeft}
+
+\vspace{\baselineskip}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont \textbf{Parent Process:}} 
+\end{FlushLeft}
+\begin{FlushLeft}
+Parent process have some initializations like shared memories, semaphores, signal handlers and signal masking. If an error occurs during these initializations, then program terminates without forking.
+\end{FlushLeft}
+\begin{FlushLeft}
+After the initializations, parent first forks nurses (they can start to place vaccines to the buffer). After that forks the citizens but stores the pid of the citizens to the citizen info shared memory. When all citizens are created then parent sorts the citizen info shared memory by age (for bonus part). Finally forks vaccinators and then waits for a signal.
+\end{FlushLeft}
+\begin{FlushLeft}
+If parent receives a signal, checks for the context. If signal is SIGUSR1, it means program succesfully finished and posts the end\_barrier semaphore then cleans up to terminate(explained in Vaccinator section). If signal is SIGUSR2, it means an error occured in one of the child process. Then sends signal to all children to terminate and cleans up to terminate itself.
+\end{FlushLeft}
+
+\vspace{\baselineskip}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont \textbf{Error Handling:}} 
+\end{FlushLeft}
+\begin{FlushLeft}
+If one of the child processes receives and error, that process sends SIGUSR2 ( which means $``$sometihng bad happened$"$  in my program) to the parent process and terminates. When parent receives SIGUSR2 signal, sends signal to all children to terminate and cleans up to terminate itself gracefully.
+\end{FlushLeft}
+
+\vspace{\baselineskip}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont \textbf{Ctrl + C Handling:}} 
+\end{FlushLeft}
+\begin{FlushLeft}
+In the beginning of the program, parent sets a signal handler for SIGINT, but after forking all childeren switches back to the default action. Because children does not allocates any heap space so there is no need to free anything in child process. Default action for SIGINT terminates process and this is a gracefully termination for child processes (I askes about this to Mr.Aptoula and he approved.)
+\end{FlushLeft}
+\begin{FlushLeft}
+But in the parent process, when SIGINT comes, sources are freed and waited for all children to terminate (no zombie).
+\end{FlushLeft}
+
+\vspace{\baselineskip}
+\begin{FlushLeft}
+{\fontsize{14pt}{16.8pt}\selectfont \textbf{Bonus Part:}}
+\end{FlushLeft}
+\begin{FlushLeft}
+Bonus part is achieved in this program. As Mr.Aptoula said, important thing is the first time inviting of a citizen. In my program if a elder process (less pid) available to be vaccinated, then vaccinator definetly invites that citizen.
+\end{FlushLeft}
+
+\vspace{\baselineskip}
+\begin{FlushLeft}
+{\fontsize{16pt}{19.2pt}\selectfont \textbf{\uline{Notices}}}
+\end{FlushLeft}
+\begin{itemize}
+	\item All requirements metioned in PDF have been achivied.
+	\item Input file must be in exactly same structure with given example file.
+	\item One program must be executing at a time. Because shared memory is used.
+	\item Not used more than 7 posix semaphores.
+\setlength{\parskip}{0.0pt}
+	\item All kinds of synchronization between processes achieved with shared memory, semaphores and signals.
+\setlength{\parskip}{8.04pt}
+	\item Parent process clean up after all its children.
+	\item In case of an arbitrary error, exit by printing to stderr a nicely formatted informative message.
+	\item Some function calls does not have error check because they have no valid error in our processes.
+	\item In case of CTRL-C the program (that means all processes) stop execution, return all resources to the system and exit with an information message.
+	\item If the required command line arguments are missing/invalid, program print usage information and exit.
+	\item No memory leak with valgrind.
+	\item Report prepared via latex
+\end{itemize}
+
+\vspace{\baselineskip}
+\printbibliography
+\end{document}
